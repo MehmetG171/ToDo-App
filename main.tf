@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "jenkins-project-backend-717171"
+    bucket = "jenkins-project-backend-71"
     key = "backend/tf-backend-jenkins.tfstate"
     region = "us-east-1"
   }
@@ -54,7 +54,6 @@ resource "aws_iam_role" "aws_access" {
     ]
   })
   managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"]
-
 }
 
 resource "aws_iam_instance_profile" "ec2-profile" {
@@ -74,18 +73,21 @@ resource "aws_security_group" "tf-sec-gr" {
     to_port     = 22
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = 5000
     protocol    = "tcp"
     to_port     = 5000
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = 3000
     protocol    = "tcp"
     to_port     = 3000
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port   = 5432
     protocol    = "tcp"
