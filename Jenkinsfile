@@ -4,6 +4,7 @@ pipeline{
         ansible 'ansible'
         terraform 'terraform'
     }
+    
     environment {
         PATH=sh(script:"echo $PATH:/usr/local/bin", returnStdout:true).trim()
         AWS_REGION = "us-east-1"
@@ -91,7 +92,7 @@ pipeline{
              }
         }
 
-        stage('Destroy the infrastructure'){
+        stage('Destroy the infrastructure') {
             steps{
                 timeout(time:5, unit:'DAYS'){
                     input message:'Approve terminate'
@@ -110,6 +111,7 @@ pipeline{
     }
 
     post {
+        
         always {
             echo 'Deleting all local images'
             sh 'docker image prune -af'
@@ -121,9 +123,7 @@ pipeline{
                 }
          }
 
-
         failure {
-
             echo 'Delete the Image Repository on ECR due to the Failure'
             sh """
                 aws ecr delete-repository \
@@ -135,5 +135,4 @@ pipeline{
                 sh 'terraform destroy --auto-approve'
         }
     }  
-
 }
